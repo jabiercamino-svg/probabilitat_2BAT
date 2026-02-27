@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probabilitat — Matemàtiques Batxillerat</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+:root {
+  --ink: #1c1c2e;
+  --paper: #f7f4ef;
+  --accent: #c0392b;
+  --accent2: #2471a3;
+  --accent3: #1e8449;
+  --gold: #d4a017;
+  --muted: #6c757d;
+  --border: #ddd8cf;
+  --theory-bg: #eaf2fb;
+  --theory-border: #2471a3;
+  --example-bg: #fef9ec;
+  --example-border: #d4a017;
+  --exercise-bg: #eafaf1;
+  --exercise-border: #1e8449;
+  --formula-bg: #1c1c2e;
+  --card: #ffffff;
+  --warning-bg: #fdf2f8;
+  --warning-border: #8e44ad;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16.5px;
+  line-height: 1.8;
+}
+
+/* ─── SIDEBAR ─── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 270px;
+  height: 100vh;
+  background: var(--ink);
+  overflow-y: auto;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 2px; }
+
+.sidebar-header {
+  padding: 32px 22px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-header .book-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.sidebar-header h1 {
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.sidebar-header .subtitle {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+}
+.nav-group { padding: 14px 0 4px; }
+.nav-group-label {
+  padding: 0 22px 6px;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  font-weight: 600;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 22px;
+  color: rgba(255,255,255,0.58);
+  text-decoration: none;
+  font-size: 0.855rem;
+  border-left: 3px solid transparent;
+  transition: all 0.18s;
+}
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.05); border-left-color: var(--gold); }
+.nav-link.active { color: #fff; background: rgba(255,255,255,0.07); border-left-color: var(--gold); }
+.nav-link .nav-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--gold);
+  opacity: 0.7;
+  min-width: 24px;
+}
+
+/* ─── MAIN ─── */
+#main { margin-left: 270px; min-height: 100vh; }
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--ink);
+  color: white;
+  padding: 80px 72px 72px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: 'P(A)';
+  position: absolute;
+  right: 60px;
+  bottom: -20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 11rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+.hero p {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 520px;
+  line-height: 1.7;
+}
+.hero-chips { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
+.chip {
+  padding: 5px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.04em; text-decoration: none; cursor: pointer; transition: opacity 0.2s;
+}
+.chip:hover { opacity: 0.8; }
+.chip-blue  { background: rgba(36,113,163,0.35); color: #7ec8f0; }
+.chip-red   { background: rgba(192,57,43,0.35);  color: #f08070; }
+.chip-green { background: rgba(30,132,73,0.35);  color: #7ed9a0; }
+.chip-gold  { background: rgba(212,160,23,0.35); color: #f0cc70; }
+.chip-purple{ background: rgba(142,68,173,0.35); color: #d7b2f0; }
+
+/* ─── CONTENT ─── */
+.content { padding: 60px 72px; max-width: 920px; }
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+  margin: 64px 0 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+  position: relative;
+}
+.section-header::before {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 60px; height: 2px;
+  background: var(--accent);
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.section-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.subsection-header { margin: 40px 0 18px; }
+.subsection-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  border-left: 4px solid var(--accent2);
+  padding-left: 14px;
+}
+
+p { margin-bottom: 16px; }
+
+/* ─── THEORY BOX ─── */
+.theory-box {
+  background: var(--theory-bg);
+  border-left: 4px solid var(--theory-border);
+  border-radius: 0 10px 10px 0;
+  padding: 22px 26px;
+  margin: 24px 0;
+}
+.theory-box .box-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--theory-border);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.theory-box h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+/* ─── FORMULA BOX ─── */
+.formula-box {
+  background: var(--formula-bg);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 28px 0;
+  position: relative;
+  overflow: hidden;
+}
+.formula-box::before {
+  content: '∑';
+  position: absolute;
+  right: 20px; top: -10px;
+  font-size: 5rem;
+  color: rgba(255,255,255,0.04);
+  font-family: serif;
+  pointer-events: none;
+}
+.formula-box .formula-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.formula-box .formula-main {
+  font-size: 1.15rem;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 2;
+  text-align: center;
+}
+.formula-box .formula-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+.formula-part {
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+}
+.formula-part strong {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--gold);
+  margin-right: 4px;
+}
+
+/* ─── EXAMPLE BOX ─── */
+.example-box {
+  background: var(--example-bg);
+  border: 1.5px solid var(--example-border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 28px 0;
+}
+.example-box .box-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.example-box .box-label::before { content: '★'; font-size: 0.75rem; }
+.example-box .example-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+.example-box .example-statement {
+  background: rgba(212,160,23,0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+.solution-steps { list-style: none; counter-reset: step; }
+.solution-steps li {
+  counter-increment: step;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+.solution-steps li::before {
+  content: counter(step);
+  background: var(--gold);
+  color: white;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.result-highlight {
+  background: var(--formula-bg);
+  color: #7ed9a0;
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ─── EXERCISE BOX ─── */
+.exercise-box {
+  background: var(--exercise-bg);
+  border: 1.5px solid var(--exercise-border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 24px 0;
+}
+.exercise-box .box-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.exercise-box .box-label::before { content: '✎'; font-size: 0.9rem; }
+.exercise-box .exercise-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.exercise-questions { list-style: none; counter-reset: q; margin: 10px 0; }
+.exercise-questions li {
+  counter-increment: q;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+.exercise-questions li::before {
+  content: counter(q, lower-alpha) ')';
+  font-weight: 700;
+  color: var(--accent3);
+  min-width: 22px;
+  flex-shrink: 0;
+}
+.solution-toggle { margin-top: 18px; }
+.toggle-btn {
+  background: none;
+  border: 2px solid var(--accent3);
+  color: var(--accent3);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.toggle-btn:hover { background: var(--accent3); color: white; }
+.solution-content {
+  display: none;
+  margin-top: 16px;
+  background: rgba(30,132,73,0.08);
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+.solution-content.open { display: block; }
+.solution-content .sol-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.solution-content p { margin-bottom: 10px; }
+
+/* ─── WARNING BOX ─── */
+.warning-box {
+  background: var(--warning-bg);
+  border-left: 4px solid var(--warning-border);
+  border-radius: 0 10px 10px 0;
+  padding: 18px 22px;
+  margin: 24px 0;
+  font-size: 0.92rem;
+}
+.warning-box .box-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--warning-border);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* ─── SUMMARY BOX ─── */
+.summary-box {
+  background: var(--ink);
+  color: #e8e8e8;
+  border-radius: 14px;
+  padding: 30px 36px;
+  margin: 40px 0 20px;
+}
+.summary-box .box-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.summary-box h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.summary-item { background: rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 16px; }
+.summary-item .si-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-bottom: 4px; letter-spacing: 0.06em; }
+.summary-item .si-val { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: var(--gold); font-weight: 600; }
+
+/* ─── TABLE ─── */
+.prob-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.prob-table thead { background: var(--ink); color: white; }
+.prob-table th { padding: 13px 18px; text-align: center; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.prob-table td { padding: 11px 18px; border-bottom: 1px solid var(--border); text-align: center; font-size: 0.9rem; }
+.prob-table tr:last-child td { border-bottom: none; }
+.prob-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+.prob-table .total-row td { background: rgba(28,28,46,0.07); font-weight: 700; color: var(--ink); font-family: 'JetBrains Mono', monospace; }
+
+/* ─── DEFINITION LIST ─── */
+.def-list { list-style: none; margin: 10px 0; }
+.def-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  font-size: 0.96rem;
+}
+.def-list li:last-child { border-bottom: none; }
+.def-list .def-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--accent2);
+  min-width: 28px;
+  font-size: 0.9rem;
+  padding-top: 2px;
+}
+
+/* ─── RULES LIST ─── */
+.rules-list { list-style: none; margin: 14px 0; }
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+.rules-list li:last-child { border-bottom: none; }
+.rule-badge {
+  background: var(--accent);
+  color: white;
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ─── 2-COLUMN CARDS ─── */
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 22px 0; }
+.card-item {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+.card-item .card-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.card-item .card-formula { color: var(--ink); font-size: 1rem; }
+
+/* ─── ILLUSTRATION + TEXT ROW ─── */
+.illus-row {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin: 8px 0 16px;
+}
+.illus-row .illus-text { flex: 1; }
+.illus-row .illus-fig { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+/* ─── STEPS GRID (protocol) ─── */
+.steps-grid {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 0;
+  margin: 16px 0;
+}
+.step-num {
+  background: var(--accent2);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12px;
+  border-radius: 6px 0 0 6px;
+  margin-bottom: 2px;
+}
+.step-content {
+  background: rgba(36,113,163,0.06);
+  padding: 10px 16px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 2px;
+  font-size: 0.93rem;
+}
+
+/* ─── Z-TABLE ─── */
+.z-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.9rem;
+}
+.z-table th {
+  background: var(--ink);
+  color: var(--gold);
+  padding: 8px 14px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+.z-table td {
+  padding: 7px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+.z-table tr:nth-child(even) { background: rgba(36,113,163,0.05); }
+.z-table td:first-child { font-weight: 600; color: var(--accent2); }
+
+/* ─── DECISION TREE ─── */
+.decision-tree {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+/* ─── SECTION DIVIDER ─── */
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 56px 0; }
+
+/* ─── FOOTER ─── */
+.page-footer {
+  margin-left: 270px;
+  background: var(--ink);
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+/* ─── MathJax ─── */
+.formula-box mjx-container { color: #fff !important; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px) {
+  #sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  .page-footer { margin-left: 0; }
+  .content { padding: 30px 22px; }
+  .hero { padding: 50px 24px; }
+  .card-grid { grid-template-columns: 1fr; }
+  .illus-row { flex-direction: column; }
+  .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="book-label">Matemàtiques · Batxillerat</div>
+    <h1>Probabilitat</h1>
+    <div class="subtitle">Combinatòria · Probabilitat clàssica · Bayes</div>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Combinatòria</div>
+    <a class="nav-link" href="#combinatoria"><span class="nav-num">1</span>Introducció</a>
+    <a class="nav-link" href="#var-sr"><span class="nav-num">1.1</span>Variacions s. rep.</a>
+    <a class="nav-link" href="#var-cr"><span class="nav-num">1.2</span>Variacions amb rep.</a>
+    <a class="nav-link" href="#permutacions"><span class="nav-num">1.3</span>Permutacions</a>
+    <a class="nav-link" href="#combinacions"><span class="nav-num">1.4</span>Combinacions</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Esdeveniments</div>
+    <a class="nav-link" href="#espai-mostral"><span class="nav-num">2</span>Espai mostral</a>
+    <a class="nav-link" href="#arbre"><span class="nav-num">2.0</span>Diagrama d'arbre</a>
+    <a class="nav-link" href="#tipus"><span class="nav-num">2.1</span>Tipus d'esdeveniments</a>
+    <a class="nav-link" href="#operacions"><span class="nav-num">2.2</span>Operacions</a>
+    <a class="nav-link" href="#morgan"><span class="nav-num">2.3</span>Lleis de Morgan</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Probabilitat</div>
+    <a class="nav-link" href="#probabilitat"><span class="nav-num">3</span>Propietats</a>
+    <a class="nav-link" href="#laplace"><span class="nav-num">3.1</span>Regla de Laplace</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Probabilitat avançada</div>
+    <a class="nav-link" href="#condicionada"><span class="nav-num">4</span>Prob. condicionada</a>
+    <a class="nav-link" href="#contingencia"><span class="nav-num">4.1</span>Taules contingència</a>
+    <a class="nav-link" href="#independencia"><span class="nav-num">4.2</span>Dep. i Independència</a>
+    <a class="nav-link" href="#prob-total"><span class="nav-num">5</span>Prob. total</a>
+    <a class="nav-link" href="#bayes"><span class="nav-num">6</span>Teorema de Bayes</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-label">Referència</div>
+    <a class="nav-link" href="#resum"><span class="nav-num">★</span>Resum de fórmules</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<div id="main">
+
+<div class="hero">
+  <div class="hero-label">Matemàtiques · Batxillerat</div>
+  <h1>Probabilitat</h1>
+  <p>Combinatòria, espais mostrals, probabilitat condicionada i el teorema de Bayes. Teoria completa, exemples resolts i exercicis pràctics d'estil PAU.</p>
+  <div class="hero-chips">
+    <a class="chip chip-blue" href="#combinatoria">Combinatòria</a>
+    <a class="chip chip-red" href="#probabilitat">Probabilitat clàssica</a>
+    <a class="chip chip-green" href="#condicionada">Prob. condicionada</a>
+    <a class="chip chip-gold" href="#bayes">Teorema de Bayes</a>
+    <a class="chip chip-purple" href="#prob-total">Prob. total</a>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 1 · COMBINATÒRIA                   -->
+<!-- ══════════════════════════════════════════ -->
+<div id="combinatoria" class="section-header">
+  <div class="section-num">Secció 1 · Combinatòria</div>
+  <h2>Combinatòria</h2>
+</div>
+
+<p>La combinatòria estudia el nombre de formes en què podem <strong>seleccionar o ordenar elements</strong> d'un conjunt. Per triar la fórmula correcta, cal respondre tres preguntes clau:</p>
+
+<div class="theory-box">
+  <div class="box-label">Arbre de decisions — Quin model triar?</div>
+  <ul class="def-list">
+    <li><span class="def-key">1</span><span><strong>Importa l'ordre?</strong> Si NO → <a href="#combinacions" style="color:var(--accent2)">Combinacions</a>. Si SÍ → continuem.</span></li>
+    <li><span class="def-key">2</span><span><strong>Usem tots els elements?</strong> Si SÍ → <a href="#permutacions" style="color:var(--accent2)">Permutacions</a>. Si NO → continuem.</span></li>
+    <li><span class="def-key">3</span><span><strong>Es poden repetir?</strong> Si NO → <a href="#var-sr" style="color:var(--accent2)">Variació s/r · V(n,m)</a> &nbsp; Si SÍ → <a href="#var-cr" style="color:var(--accent2)">Variació c/r · VR(n,m)</a></span></li>
+  </ul>
+</div>
+
+<!-- Arbre de decisions visual -->
+<div class="decision-tree">
+  <svg width="100%" viewBox="0 0 820 440" xmlns="http://www.w3.org/2000/svg" style="font-family:'Source Sans 3',sans-serif;">
+    <defs>
+      <marker id="arr"       markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#888"/></marker>
+      <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#1e8449"/></marker>
+      <marker id="arr-red"   markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#c0392b"/></marker>
+      <marker id="arr-gold"  markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#b8860b"/></marker>
+      <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#8e44ad"/></marker>
+    </defs>
+
+    <!-- ══ NODE 0: arrel ══ -->
+    <rect x="310" y="12" width="200" height="42" rx="10" fill="#1c1c2e"/>
+    <text x="410" y="37" text-anchor="middle" font-size="13" fill="#d4a017" font-weight="700">Problema combinatori</text>
+
+    <!-- fletxa central avall -->
+    <line x1="410" y1="54" x2="410" y2="82" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+
+    <!-- ══ NODE 1: Importa l'ordre? ══ -->
+    <rect x="300" y="82" width="220" height="48" rx="10" fill="#2471a3"/>
+    <text x="410" y="103" text-anchor="middle" font-size="13" fill="white" font-weight="700">Importa l'ordre?</text>
+    <text x="410" y="121" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">(AB ≠ BA?)</text>
+
+    <!-- ── branca NO esquerra → COMBINACIONS ── -->
+    <line x1="300" y1="106" x2="130" y2="106" stroke="#1e8449" stroke-width="2" marker-end="url(#arr-green)"/>
+    <text x="215" y="98" text-anchor="middle" font-size="11" fill="#1e8449" font-weight="700">NO</text>
+
+    <!-- Caixa COMBINACIONS -->
+    <rect x="10" y="78" width="110" height="36" rx="9" fill="#1e8449"/>
+    <text x="65" y="101" text-anchor="middle" font-size="12" fill="white" font-weight="700">COMBINACIONS</text>
+    <!-- Fórmula sota -->
+    <rect x="10" y="118" width="110" height="24" rx="6" fill="rgba(30,132,73,0.12)" stroke="#1e8449" stroke-width="1"/>
+    <text x="65" y="134" text-anchor="middle" font-size="10.5" fill="#1e8449" font-weight="600">C(n,m) = n! / m!(n-m)!</text>
+
+    <!-- ── branca SÍ avall ── -->
+    <line x1="410" y1="130" x2="410" y2="168" stroke="#c0392b" stroke-width="2" marker-end="url(#arr-red)"/>
+    <text x="422" y="154" font-size="11" fill="#c0392b" font-weight="700">SÍ</text>
+
+    <!-- ══ NODE 2: Usem tots? ══ -->
+    <rect x="300" y="168" width="220" height="48" rx="10" fill="#c0392b"/>
+    <text x="410" y="189" text-anchor="middle" font-size="13" fill="white" font-weight="700">Usem tots? (m = n)</text>
+    <text x="410" y="207" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">(agafem tots els elements?)</text>
+
+    <!-- ── branca SÍ dreta → PERMUTACIONS ── -->
+    <line x1="520" y1="192" x2="690" y2="192" stroke="#c0392b" stroke-width="2" marker-end="url(#arr-red)"/>
+    <text x="603" y="184" text-anchor="middle" font-size="11" fill="#c0392b" font-weight="700">SÍ</text>
+
+    <!-- Caixa PERMUTACIONS -->
+    <rect x="692" y="172" width="118" height="36" rx="9" fill="#c0392b"/>
+    <text x="751" y="195" text-anchor="middle" font-size="12" fill="white" font-weight="700">PERMUTACIONS</text>
+    <!-- Fórmula sota -->
+    <rect x="692" y="212" width="118" height="24" rx="6" fill="rgba(192,57,43,0.12)" stroke="#c0392b" stroke-width="1"/>
+    <text x="751" y="228" text-anchor="middle" font-size="10.5" fill="#c0392b" font-weight="600">P(n) = n!</text>
+
+    <!-- ── branca NO avall ── -->
+    <line x1="410" y1="216" x2="410" y2="264" stroke="#888" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="422" y="246" font-size="11" fill="#555" font-weight="700">NO</text>
+
+    <!-- ══ NODE 3: Es poden repetir? ══ -->
+    <rect x="300" y="264" width="220" height="48" rx="10" fill="#8e44ad"/>
+    <text x="410" y="285" text-anchor="middle" font-size="13" fill="white" font-weight="700">Es poden repetir?</text>
+    <text x="410" y="303" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.65)">(pot sortir el mateix element?)</text>
+
+    <!-- ── branca NO esquerra → Variació s/r ── -->
+    <line x1="300" y1="288" x2="130" y2="288" stroke="#b8860b" stroke-width="2" marker-end="url(#arr-gold)"/>
+    <text x="215" y="280" text-anchor="middle" font-size="11" fill="#b8860b" font-weight="700">NO</text>
+
+    <!-- Caixa Variació s/r -->
+    <rect x="10" y="264" width="110" height="36" rx="9" fill="#d4a017"/>
+    <text x="65" y="282" text-anchor="middle" font-size="12" fill="white" font-weight="700">Variació s/r</text>
+    <text x="65" y="295" text-anchor="middle" font-size="10" fill="white">V(n,m)</text>
+    <!-- Fórmula sota -->
+    <rect x="10" y="304" width="110" height="24" rx="6" fill="rgba(212,160,23,0.12)" stroke="#d4a017" stroke-width="1"/>
+    <text x="65" y="320" text-anchor="middle" font-size="10.5" fill="#b8860b" font-weight="600">V(n,m) = n! / (n-m)!</text>
+
+    <!-- ── branca SÍ dreta → Variació c/r ── -->
+    <line x1="520" y1="288" x2="690" y2="288" stroke="#b8860b" stroke-width="2" marker-end="url(#arr-gold)"/>
+    <text x="603" y="280" text-anchor="middle" font-size="11" fill="#b8860b" font-weight="700">SÍ</text>
+
+    <!-- Caixa Variació c/r -->
+    <rect x="692" y="264" width="118" height="36" rx="9" fill="#d4a017"/>
+    <text x="751" y="282" text-anchor="middle" font-size="12" fill="white" font-weight="700">Variació c/r</text>
+    <text x="751" y="295" text-anchor="middle" font-size="10" fill="white">VR(n,m)</text>
+    <!-- Fórmula sota -->
+    <rect x="692" y="304" width="118" height="24" rx="6" fill="rgba(212,160,23,0.12)" stroke="#d4a017" stroke-width="1"/>
+    <text x="751" y="320" text-anchor="middle" font-size="10.5" fill="#b8860b" font-weight="600">VR(n,m) = n ᵐ</text>
+
+    <!-- ── línia vertical esquerra connectora ── -->
+    <line x1="65" y1="146" x2="65" y2="264" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+    <!-- ── línia vertical dreta connectora ── -->
+    <line x1="751" y1="240" x2="751" y2="264" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+
+    <!-- ── nota peu ── -->
+    <text x="410" y="395" text-anchor="middle" font-size="9.5" fill="#aaa">← Resultat a l'esquerra quan la resposta és NO · Resultat a la dreta quan la resposta és SÍ →</text>
+  </svg>
+</div>
+
+<!-- ─── 1.1 VARIACIONS SENSE REPETICIÓ ─── -->
+<hr class="section-divider">
+<div id="var-sr" class="subsection-header">
+  <h3>1.1 · Variacions sense repetició</h3>
+</div>
+
+<p>Quan <strong>l'ordre importa</strong>, triem <em>una part</em> dels elements i <strong>no es poden repetir</strong>. Donat un conjunt de \(n\) elements, triant grups de \(m\):</p>
+
+<div class="formula-box">
+  <div class="formula-label">Fórmula · Variacions sense repetició</div>
+  <div class="formula-main">
+    $$V(n,m) = \frac{n!}{(n-m)!} = n \cdot (n-1) \cdot \ldots \cdot (n-m+1)$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>n</strong> total d'elements disponibles</div>
+    <div class="formula-part"><strong>m</strong> elements que triem (m ≤ n)</div>
+    <div class="formula-part"><strong>n!</strong> = n·(n−1)·…·2·1</div>
+    <div class="formula-part"><strong>Clau:</strong> ordre importa, sense repetició</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Curs de natació</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="example-title">De quantes formes es poden assignar les medalles d'or, plata i bronze entre 8 corredors?</div>
+      <div class="example-statement">Importa l'ordre (or ≠ plata ≠ bronze), no es repeteixen, triem 3 de 8 → \(V(8,3)\)</div>
+      <ul class="solution-steps">
+        <li>Identifiquem: \(n = 8\), \(m = 3\)</li>
+        <li>Apliquem la fórmula: $$V(8,3) = \frac{8!}{(8-3)!} = \frac{8!}{5!} = 8 \cdot 7 \cdot 6 = 336$$</li>
+        <li>Resultat: <span class="result-highlight">336 formes distintes</span></li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <!-- SVG: podium medallles -->
+      <svg width="120" height="115" viewBox="0 0 120 115" xmlns="http://www.w3.org/2000/svg">
+        <!-- podium 1r -->
+        <rect x="45" y="45" width="30" height="55" rx="3" fill="#d4a017"/>
+        <text x="60" y="38" text-anchor="middle" font-size="9" fill="#d4a017" font-weight="700">🥇</text>
+        <text x="60" y="78" text-anchor="middle" font-size="20" fill="white" font-weight="900">1</text>
+        <!-- podium 2n -->
+        <rect x="5" y="65" width="30" height="35" rx="3" fill="#aaa"/>
+        <text x="20" y="58" text-anchor="middle" font-size="9" fill="#aaa" font-weight="700">🥈</text>
+        <text x="20" y="88" text-anchor="middle" font-size="18" fill="white" font-weight="900">2</text>
+        <!-- podium 3r -->
+        <rect x="85" y="75" width="30" height="25" rx="3" fill="#cd7f32"/>
+        <text x="100" y="68" text-anchor="middle" font-size="9" fill="#cd7f32" font-weight="700">🥉</text>
+        <text x="100" y="93" text-anchor="middle" font-size="16" fill="white" font-weight="900">3</text>
+        <!-- base -->
+        <rect x="3" y="100" width="114" height="7" rx="2" fill="#1c1c2e" opacity="0.6"/>
+        <!-- títol -->
+        <text x="60" y="113" text-anchor="middle" font-size="7.5" fill="#888">V(8,3) = 336</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 1 · Comitè directiu</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">De quantes formes podem triar president, vicepresident i secretari d'entre 5 persones?</div>
+      <ul class="exercise-questions">
+        <li>Identifica el tipus de problema i justifica per què l'ordre importa.</li>
+        <li>Calcula el nombre de formes possibles.</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- taula reunió -->
+        <ellipse cx="50" cy="60" rx="38" ry="18" fill="#ddd8cf" stroke="#8B6914" stroke-width="1.5"/>
+        <!-- persones al voltant (5 cadires) -->
+        <circle cx="50" cy="28" r="10" fill="#2471a3"/>
+        <text x="50" y="33" text-anchor="middle" font-size="8" fill="white" font-weight="700">P</text>
+        <circle cx="82" cy="42" r="10" fill="#1e8449"/>
+        <text x="82" y="47" text-anchor="middle" font-size="8" fill="white" font-weight="700">VP</text>
+        <circle cx="82" cy="72" r="10" fill="#c0392b"/>
+        <text x="82" y="77" text-anchor="middle" font-size="8" fill="white" font-weight="700">S</text>
+        <circle cx="18" cy="42" r="9" fill="#d4a017" opacity="0.7"/>
+        <text x="18" y="47" text-anchor="middle" font-size="8" fill="white">?</text>
+        <circle cx="18" cy="72" r="9" fill="#6c757d" opacity="0.7"/>
+        <text x="18" y="77" text-anchor="middle" font-size="8" fill="white">?</text>
+        <text x="50" y="65" text-anchor="middle" font-size="7.5" fill="#1c1c2e" font-weight="600">5 persones</text>
+        <text x="50" y="97" text-anchor="middle" font-size="7" fill="#888">V(5,3) = ?</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> President ≠ Vicepresident → l'ordre importa. No es pot repetir càrrec → Variació sense repetició.</p>
+      <p><strong>b)</strong> \(n=5,\; m=3\)</p>
+      $$V(5,3) = \frac{5!}{2!} = \frac{120}{2} = \mathbf{60 \text{ formes}}$$
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 2 · Contrasenya d'ordinador</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">Una contrasenya de 4 lletres distintes escollides de l'alfabet (26 lletres). Les lletres NO es poden repetir. Quantes contrasenyes possibles hi ha?</div>
+      <ul class="exercise-questions">
+        <li>Tria el model adequat i justifica.</li>
+        <li>Calcula el resultat.</li>
+        <li>Si ara es permeten repeticions, com canvia el resultat?</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="120" height="110" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="8" width="100" height="68" rx="6" fill="#1c1c2e" stroke="#d4a017" stroke-width="2"/>
+        <rect x="16" y="14" width="88" height="55" rx="3" fill="#2d2d4e"/>
+        <text x="22" y="32" font-family="monospace" font-size="7" fill="#7ec8f0">_ _ _ _</text>
+        <text x="22" y="44" font-family="monospace" font-size="6" fill="#d4a017">A-Z  no rep.</text>
+        <text x="22" y="56" font-family="monospace" font-size="6" fill="#7ed9a0">V(26,4)=?</text>
+        <rect x="4" y="76" width="112" height="8" rx="3" fill="#1c1c2e" stroke="#d4a017" stroke-width="1.5"/>
+        <rect x="42" y="76" width="36" height="5" rx="2" fill="#2d2d4e"/>
+        <text x="60" y="98" text-anchor="middle" font-size="7.5" fill="#888">26 lletres, 4 posicions</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a/b)</strong> Ordre importa (AB ≠ BA), no repetició → Variació s.r. \(V(26,4)\)</p>
+      $$V(26,4) = \frac{26!}{22!} = 26 \cdot 25 \cdot 24 \cdot 23 = \mathbf{358{,}800 \text{ contrasenyes}}$$
+      <p style="margin-top:10px"><strong>c) Amb repetició:</strong> ara seria \(VR(26,4) = 26^4 = 456{,}976\) contrasenyes. Les repeticions augmenten molt el nombre de possibilitats (i per tant la seguretat de la contrasenya).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── 1.2 VARIACIONS AMB REPETICIÓ ─── -->
+<hr class="section-divider">
+<div id="var-cr" class="subsection-header">
+  <h3>1.2 · Variacions amb repetició</h3>
+</div>
+
+<p>Quan <strong>l'ordre importa</strong> i els elements <strong>es poden repetir</strong>. Donat \(n\) elements, agafats de \(m\) en \(m\):</p>
+
+<div class="formula-box">
+  <div class="formula-label">Fórmula · Variacions amb repetició</div>
+  <div class="formula-main">
+    $$VR(n,m) = n^m$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>n</strong> opcions disponibles per cada posició</div>
+    <div class="formula-part"><strong>m</strong> posicions a omplir</div>
+    <div class="formula-part"><strong>Regla:</strong> cada posició és independent de les altres</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · PIN bancari</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="example-title">Quants codis PIN de 4 dígits (0–9) es poden formar si els dígits es poden repetir?</div>
+      <ul class="solution-steps">
+        <li>Cada posició té 10 opcions (0–9), l'ordre importa i es pot repetir → \(VR(10,4)\)</li>
+        <li>$$VR(10,4) = 10^4 = \mathbf{10{,}000 \text{ PINs possibles}}$$</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="130" height="85" viewBox="0 0 130 85" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="126" height="81" rx="9" fill="#1c1c2e" stroke="#d4a017" stroke-width="2"/>
+        <rect x="14" y="20" width="24" height="18" rx="3" fill="#d4a017" opacity="0.85"/>
+        <line x1="14" y1="29" x2="38" y2="29" stroke="#1c1c2e" stroke-width="1"/>
+        <line x1="26" y1="20" x2="26" y2="38" stroke="#1c1c2e" stroke-width="1"/>
+        <text x="14" y="56" font-family="monospace" font-size="7.5" fill="rgba(255,255,255,0.7)" letter-spacing="2">●●●●  ●●●●</text>
+        <text x="14" y="70" font-family="monospace" font-size="7" fill="#d4a017">PIN: _ _ _ _</text>
+        <text x="100" y="30" font-size="16" fill="rgba(255,255,255,0.3)">))))</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 3 · Loteria de Nadal</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">El número guanyador de "El Gordo" de Nadal és un nombre de 5 xifres (les xifres es poden repetir, del 0 al 9).</div>
+      <ul class="exercise-questions">
+        <li>Calcula el total de números possibles.</li>
+        <li>Calcula la probabilitat de guanyar si tens un dècim.</li>
+        <li>Si el número guanyador no pot començar per 0 (és un nombre de 5 xifres vertader), quants en queden?</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- bola loteria -->
+        <circle cx="50" cy="50" r="38" fill="#c0392b" stroke="#8B0000" stroke-width="2"/>
+        <circle cx="50" cy="50" r="28" fill="white" opacity="0.15"/>
+        <text x="50" y="44" text-anchor="middle" font-size="11" fill="white" font-weight="700">El Gordo</text>
+        <text x="50" y="58" text-anchor="middle" font-size="9.5" fill="#d4a017" font-weight="700">? ? ? ? ?</text>
+        <text x="50" y="70" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.7)">10⁵ =</text>
+        <text x="50" y="82" text-anchor="middle" font-size="8" fill="#d4a017" font-weight="600">100.000</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> Ordre importa, repetició permesa → \(VR(10,5) = 10^5 = \mathbf{100{,}000}\) números possibles.</p>
+      <p><strong>b)</strong></p>
+      $$P(\text{El Gordo}) = \frac{1}{100{,}000} = 0{,}000\,01 = \mathbf{0{,}001\%}$$
+      <p><strong>c)</strong> La primera xifra no pot ser 0 → té 9 opcions (1–9). La resta continuen tenint 10 opcions.</p>
+      $$9 \cdot 10^4 = \mathbf{90{,}000 \text{ números de 5 xifres reals}}$$
+    </div>
+  </div>
+</div>
+
+<!-- ─── 1.3 PERMUTACIONS ─── -->
+<hr class="section-divider">
+<div id="permutacions" class="subsection-header">
+  <h3>1.3 · Permutacions</h3>
+</div>
+
+<p>Quan <strong>l'ordre importa</strong>, s'agafen <strong>tots els elements</strong> \((m=n)\) i <strong>no es permeten repeticions</strong>. És un cas especial de les variacions sense repetició on \(m = n\).</p>
+
+<div class="formula-box">
+  <div class="formula-label">Fórmula · Permutacions</div>
+  <div class="formula-main">
+    $$P(n) = n! = n \cdot (n-1) \cdot \ldots \cdot 2 \cdot 1$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>n!</strong> = n·(n−1)·…·2·1</div>
+    <div class="formula-part"><strong>Cas especial:</strong> 0! = 1</div>
+    <div class="formula-part"><strong>Nota:</strong> P(n) = V(n,n)</div>
+  </div>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Valors factorials de referència</div>
+  <table class="z-table">
+    <thead><tr><th>n</th><th>n!</th><th>n</th><th>n!</th></tr></thead>
+    <tbody>
+      <tr><td>0!</td><td>1</td><td>5!</td><td>120</td></tr>
+      <tr><td>1!</td><td>1</td><td>6!</td><td>720</td></tr>
+      <tr><td>2!</td><td>2</td><td>7!</td><td>5.040</td></tr>
+      <tr><td>3!</td><td>6</td><td>8!</td><td>40.320</td></tr>
+      <tr><td>4!</td><td>24</td><td>10!</td><td>3.628.800</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Ordenació de lletres</div>
+  <div class="example-title">Quantes formes hi ha d'ordenar les lletres 'ABC'?</div>
+  <ul class="solution-steps">
+    <li>Tots els elements, ordre importa, sense repetició → Permutació</li>
+    <li>$$P(3) = 3! = 3 \cdot 2 \cdot 1 = 6$$</li>
+    <li>Les 6 ordenacions: <span class="result-highlight">ABC · ACB · BAC · BCA · CAB · CBA</span></li>
+  </ul>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 4 · Festival de música</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">A un festival hi actuen 5 grups musicals. De quantes formes es pot ordenar l'actuació dels grups?</div>
+      <ul class="exercise-questions">
+        <li>Justifica per què es tracta d'una permutació.</li>
+        <li>Calcula el nombre de programes d'actuació possibles.</li>
+        <li>Si els 2 grups principals han d'actuar consecutivament, quantes ordres possibles hi ha?</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="120" height="100" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="10,10 30,10 20,90 10,90" fill="#c0392b" opacity="0.8"/>
+        <polygon points="110,10 90,10 100,90 110,90" fill="#c0392b" opacity="0.8"/>
+        <rect x="28" y="10" width="64" height="70" fill="#2d2d4e"/>
+        <polygon points="60,10 40,60 80,60" fill="rgba(212,160,23,0.15)"/>
+        <circle cx="60" cy="10" r="5" fill="#d4a017"/>
+        <rect x="58" y="40" width="4" height="22" fill="rgba(255,255,255,0.6)" rx="2"/>
+        <ellipse cx="60" cy="38" rx="6" ry="8" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="30" cy="88" r="4" fill="#1c1c2e"/>
+        <circle cx="45" cy="88" r="4" fill="#1c1c2e"/>
+        <circle cx="60" cy="88" r="4" fill="#1c1c2e"/>
+        <circle cx="75" cy="88" r="4" fill="#1c1c2e"/>
+        <circle cx="90" cy="88" r="4" fill="#1c1c2e"/>
+        <rect x="22" y="78" width="76" height="6" rx="2" fill="#d4a017" opacity="0.7"/>
+        <text x="48" y="28" font-size="14" fill="rgba(255,255,255,0.4)">♪</text>
+        <text x="66" y="26" font-size="11" fill="rgba(255,255,255,0.3)">♫</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> Tots els grups actuen (m=n=5), l'ordre importa (1r grup ≠ 5è grup) → Permutació.</p>
+      <p><strong>b)</strong> \(P(5) = 5! = 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1 = \mathbf{120 \text{ programes possibles}}\)</p>
+      <p><strong>c)</strong> Tractem els 2 grups principals com un únic "bloc" → ara tenim 4 elements (3 grups normals + 1 bloc). A més, el bloc intern es pot ordenar de 2! = 2 maneres.</p>
+      $$P(4) \cdot P(2) = 4! \cdot 2! = 24 \cdot 2 = \mathbf{48 \text{ ordres}}$$
+    </div>
+  </div>
+</div>
+
+<!-- ─── 1.4 COMBINACIONS ─── -->
+<hr class="section-divider">
+<div id="combinacions" class="subsection-header">
+  <h3>1.4 · Combinacions</h3>
+</div>
+
+<p>Quan <strong>l'ordre NO importa</strong> i els elements <strong>no es poden repetir</strong>. Triem \(m\) elements de \(n\) sense importar en quin ordre.</p>
+
+<div class="formula-box">
+  <div class="formula-label">Fórmula · Combinacions</div>
+  <div class="formula-main">
+    $$C(n,m) = \binom{n}{m} = \frac{n!}{m!\,(n-m)!}$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>n</strong> total d'elements disponibles</div>
+    <div class="formula-part"><strong>m</strong> elements que triem (m ≤ n)</div>
+    <div class="formula-part"><strong>Propietat:</strong> C(n,m) = C(n, n−m)</div>
+    <div class="formula-part"><strong>Relació:</strong> C(n,m) = V(n,m) / m!</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Selecció d'estudiants</div>
+  <div class="example-title">De quantes formes podem triar 3 estudiants d'una classe de 10, sense importar l'ordre?</div>
+  <ul class="solution-steps">
+    <li>Ordre no importa, no repetició → Combinació. \(n=10,\; m=3\)</li>
+    <li>$$C(10,3) = \frac{10!}{3!\cdot 7!} = \frac{10 \cdot 9 \cdot 8}{3 \cdot 2 \cdot 1} = \frac{720}{6} = 120$$</li>
+    <li><span class="result-highlight">120 formes possibles</span></li>
+  </ul>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 5 · Biblioteca</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">A una prestatgeria hi ha 9 llibres diferents. Vols agafar-ne 3 per llegir aquest estiu. L'ordre no importa.</div>
+      <ul class="exercise-questions">
+        <li>Justifica per què s'aplica la fórmula de combinacions.</li>
+        <li>Calcula el nombre de trios de llibres possibles.</li>
+        <li>Si 2 dels 9 llibres formen una saga i sempre els agafes tots dos o cap, quants trios hi ha ara?</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="130" height="100" viewBox="0 0 130 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="15" width="120" height="5" rx="2" fill="#8B6914"/>
+        <rect x="10" y="18" width="10" height="32" rx="2" fill="#c0392b"/>
+        <rect x="22" y="22" width="10" height="28" rx="2" fill="#2471a3"/>
+        <rect x="34" y="20" width="10" height="30" rx="2" fill="#1e8449"/>
+        <rect x="46" y="18" width="10" height="32" rx="2" fill="#8e44ad"/>
+        <rect x="58" y="21" width="10" height="29" rx="2" fill="#d4a017"/>
+        <rect x="70" y="19" width="10" height="31" rx="2" fill="#c0392b" opacity="0.7"/>
+        <rect x="82" y="22" width="10" height="28" rx="2" fill="#2471a3" opacity="0.7"/>
+        <rect x="94" y="18" width="10" height="32" rx="2" fill="#1e8449" opacity="0.7"/>
+        <rect x="106" y="20" width="10" height="30" rx="2" fill="#d4a017" opacity="0.7"/>
+        <rect x="5" y="50" width="120" height="5" rx="2" fill="#8B6914"/>
+        <rect x="5" y="85" width="120" height="6" rx="2" fill="#5a3e0a" opacity="0.4"/>
+        <text x="30" y="72" font-family="serif" font-size="9" fill="#1c1c2e" font-style="italic">9 llibres, tria 3</text>
+        <text x="38" y="83" font-family="monospace" font-size="8" fill="#c0392b">C(9,3) = ?</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> Tria sense importar l'ordre i sense repetició → Combinació.</p>
+      <p><strong>b)</strong> $$C(9,3) = \frac{9!}{3!\cdot 6!} = \frac{9 \cdot 8 \cdot 7}{6} = \frac{504}{6} = \mathbf{84 \text{ possibilitats}}$$</p>
+      <p><strong>c)</strong> Cas 1: No agafem cap llibre de la saga → triem 3 dels 7 restants: \(C(7,3) = 35\). Cas 2: Agafem els 2 de la saga → triem 1 dels 7 restants: \(C(7,1) = 7\).</p>
+      $$\text{Total} = 35 + 7 = \mathbf{42 \text{ trios}}$$
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 2 · ESPAI MOSTRAL                  -->
+<!-- ══════════════════════════════════════════ -->
+<hr class="section-divider">
+<div id="espai-mostral" class="section-header">
+  <div class="section-num">Secció 2 · Esdeveniments</div>
+  <h2>Espai mostral i esdeveniments</h2>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Definicions clau</div>
+  <ul class="def-list">
+    <li><span class="def-key">Exp.</span><span><strong>Experiment aleatori:</strong> no podem predir el resultat; depèn de l'atzar. Ex: llençar un dau.</span></li>
+    <li><span class="def-key">E</span><span><strong>Espai mostral:</strong> conjunt de <em>tots</em> els possibles resultats. Ex: llençar dau → \(E=\{1,2,3,4,5,6\}\)</span></li>
+    <li><span class="def-key">A</span><span><strong>Esdeveniment:</strong> subconjunt de l'espai mostral. Ex: treure parell → \(A=\{2,4,6\}\)</span></li>
+    <li><span class="def-key">∅</span><span><strong>Esdeveniment impossible:</strong> no pot ocórrer mai. \(P(\emptyset)=0\)</span></li>
+    <li><span class="def-key">E</span><span><strong>Esdeveniment segur:</strong> sempre ocorre. \(P(E)=1\)</span></li>
+  </ul>
+</div>
+
+<!-- Diagrama d'arbre SVG -->
+<div id="arbre" class="subsection-header" style="margin-top:36px">
+  <h3>2.0 · Diagrama d'arbre</h3>
+</div>
+<p>Mètode gràfic de comptatge dels possibles resultats. L'espai mostral s'obté a les <strong>branques finals</strong>.</p>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Menú del restaurant</div>
+  <div class="example-title">Primer: amanida (A) o sopa (S). Segon: carn (C), peix (P), arròs (R). Postres: gelat (G) o fruita (F).</div>
+  <div class="example-statement">Total de combinacions: \(2 \times 3 \times 2 = 12\)</div>
+
+  <svg width="100%" viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" style="margin:16px 0; font-family:'Source Sans 3',sans-serif;">
+    <rect width="680" height="320" rx="10" fill="#fef9ec"/>
+    <!-- ROOT -->
+    <circle cx="50" cy="160" r="16" fill="#1c1c2e"/>
+    <text x="50" y="165" text-anchor="middle" font-size="12" fill="#d4a017" font-weight="700">Menú</text>
+    <!-- Amanida branch -->
+    <line x1="66" y1="148" x2="164" y2="90" stroke="#2471a3" stroke-width="2"/>
+    <circle cx="180" cy="82" r="22" fill="#2471a3"/>
+    <text x="180" y="87" text-anchor="middle" font-size="12" fill="white" font-weight="600">A</text>
+    <text x="115" y="108" font-size="10" fill="#2471a3" font-weight="600">amanida</text>
+    <!-- Sopa branch -->
+    <line x1="66" y1="172" x2="164" y2="230" stroke="#c0392b" stroke-width="2"/>
+    <circle cx="180" cy="238" r="22" fill="#c0392b"/>
+    <text x="180" y="243" text-anchor="middle" font-size="12" fill="white" font-weight="600">S</text>
+    <text x="115" y="220" font-size="10" fill="#c0392b" font-weight="600">sopa</text>
+    <!-- LEVEL 2 Amanida -->
+    <line x1="202" y1="75" x2="298" y2="45" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="40" r="18" fill="#1e8449"/>
+    <text x="312" y="45" text-anchor="middle" font-size="11" fill="white" font-weight="600">C</text>
+    <line x1="202" y1="82" x2="298" y2="82" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="82" r="18" fill="#1e8449"/>
+    <text x="312" y="87" text-anchor="middle" font-size="11" fill="white" font-weight="600">P</text>
+    <line x1="202" y1="90" x2="298" y2="122" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="127" r="18" fill="#1e8449"/>
+    <text x="312" y="132" text-anchor="middle" font-size="11" fill="white" font-weight="600">R</text>
+    <!-- LEVEL 2 Sopa -->
+    <line x1="202" y1="230" x2="298" y2="198" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="193" r="18" fill="#1e8449"/>
+    <text x="312" y="198" text-anchor="middle" font-size="11" fill="white" font-weight="600">C</text>
+    <line x1="202" y1="238" x2="298" y2="238" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="238" r="18" fill="#1e8449"/>
+    <text x="312" y="243" text-anchor="middle" font-size="11" fill="white" font-weight="600">P</text>
+    <line x1="202" y1="246" x2="298" y2="278" stroke="#1e8449" stroke-width="1.5"/>
+    <circle cx="312" cy="282" r="18" fill="#1e8449"/>
+    <text x="312" y="287" text-anchor="middle" font-size="11" fill="white" font-weight="600">R</text>
+    <!-- LEVEL 3: postres (6 branques) -->
+    <!-- A-C-G/F -->
+    <line x1="330" y1="34" x2="414" y2="20" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="20" r="7" fill="#d4a017"/>
+    <text x="422" y="24" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="24" font-size="10" fill="#1c1c2e" font-weight="600">A-C-G</text>
+    <line x1="330" y1="40" x2="414" y2="52" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="52" r="7" fill="#1e8449"/>
+    <text x="422" y="56" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="55" font-size="10" fill="#1c1c2e" font-weight="600">A-C-F</text>
+    <!-- A-P-G/F -->
+    <line x1="330" y1="76" x2="414" y2="70" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="70" r="7" fill="#d4a017"/>
+    <text x="422" y="74" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="73" font-size="10" fill="#1c1c2e" font-weight="600">A-P-G</text>
+    <line x1="330" y1="82" x2="414" y2="93" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="93" r="7" fill="#1e8449"/>
+    <text x="422" y="97" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="97" font-size="10" fill="#1c1c2e" font-weight="600">A-P-F</text>
+    <!-- A-R-G/F -->
+    <line x1="330" y1="120" x2="414" y2="115" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="115" r="7" fill="#d4a017"/>
+    <text x="422" y="119" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="119" font-size="10" fill="#1c1c2e" font-weight="600">A-R-G</text>
+    <line x1="330" y1="130" x2="414" y2="140" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="140" r="7" fill="#1e8449"/>
+    <text x="422" y="144" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="143" font-size="10" fill="#1c1c2e" font-weight="600">A-R-F</text>
+    <!-- S-C-G/F -->
+    <line x1="330" y1="187" x2="414" y2="175" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="175" r="7" fill="#d4a017"/>
+    <text x="422" y="179" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="178" font-size="10" fill="#1c1c2e" font-weight="600">S-C-G</text>
+    <line x1="330" y1="195" x2="414" y2="205" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="205" r="7" fill="#1e8449"/>
+    <text x="422" y="209" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="208" font-size="10" fill="#1c1c2e" font-weight="600">S-C-F</text>
+    <!-- S-P-G/F -->
+    <line x1="330" y1="232" x2="414" y2="225" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="225" r="7" fill="#d4a017"/>
+    <text x="422" y="229" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="228" font-size="10" fill="#1c1c2e" font-weight="600">S-P-G</text>
+    <line x1="330" y1="242" x2="414" y2="252" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="252" r="7" fill="#1e8449"/>
+    <text x="422" y="256" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="255" font-size="10" fill="#1c1c2e" font-weight="600">S-P-F</text>
+    <!-- S-R-G/F -->
+    <line x1="330" y1="277" x2="414" y2="272" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="272" r="7" fill="#d4a017"/>
+    <text x="422" y="276" text-anchor="middle" font-size="8" fill="white" font-weight="700">G</text>
+    <text x="434" y="275" font-size="10" fill="#1c1c2e" font-weight="600">S-R-G</text>
+    <line x1="330" y1="286" x2="414" y2="295" stroke="#d4a017" stroke-width="1.2"/>
+    <circle cx="422" cy="295" r="7" fill="#1e8449"/>
+    <text x="422" y="299" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+    <text x="434" y="298" font-size="10" fill="#1c1c2e" font-weight="600">S-R-F</text>
+    <!-- Total -->
+    <rect x="560" y="135" width="110" height="30" rx="6" fill="#1c1c2e"/>
+    <text x="615" y="155" text-anchor="middle" font-size="11" fill="#d4a017" font-weight="700">Total: 12 menús</text>
+  </svg>
+</div>
+
+<!-- Tipus d'esdeveniments -->
+<div id="tipus" class="subsection-header">
+  <h3>2.1 · Tipus d'esdeveniments</h3>
+</div>
+
+<div class="card-grid">
+  <div class="card-item">
+    <div class="card-label">Compatibles</div>
+    <p style="font-size:0.88rem; margin-bottom:8px">Poden ocórrer alhora. \(A \cap B \neq \emptyset\)</p>
+    <div class="card-formula">Ex: dau → {parell} i {major de 3} → \(\{4,6\}\)</div>
+  </div>
+  <div class="card-item">
+    <div class="card-label">Incompatibles (mútuament excloents)</div>
+    <p style="font-size:0.88rem; margin-bottom:8px">No poden ocórrer alhora. \(A \cap B = \emptyset\)</p>
+    <div class="card-formula">Ex: dau → {parell} i {imparell} → \(\emptyset\)</div>
+  </div>
+  <div class="card-item">
+    <div class="card-label">Complementaris</div>
+    <p style="font-size:0.88rem; margin-bottom:8px">\(\bar{A}\) = "tot menys A". \(P(\bar{A}) = 1 - P(A)\)</p>
+    <div class="card-formula">Ex: \(P(\text{no 6}) = 1 - 1/6 = 5/6\)</div>
+  </div>
+  <div class="card-item">
+    <div class="card-label">Segur i impossible</div>
+    <p style="font-size:0.88rem; margin-bottom:8px">Segur \(P(E)=1\), impossible \(P(\emptyset)=0\)</p>
+    <div class="card-formula">Ex: dau → treure ≤ 6 (segur), treure 7 (impossible)</div>
+  </div>
+</div>
+
+<!-- Operacions -->
+<div id="operacions" class="subsection-header">
+  <h3>2.2 · Operacions amb esdeveniments</h3>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Operacions bàsiques</div>
+  <ul class="def-list">
+    <li><span class="def-key">∪</span><span><strong>Unió A ∪ B:</strong> ocorre A, o B, o tots dos. "A o B"</span></li>
+    <li><span class="def-key">∩</span><span><strong>Intersecció A ∩ B:</strong> ocorren A i B alhora. "A i B"</span></li>
+    <li><span class="def-key">Ā</span><span><strong>Complementari Ā:</strong> no ocorre A. "No A"</span></li>
+    <li><span class="def-key">⊆</span><span><strong>A ⊆ B:</strong> si ocorre A, necessàriament ocorre B. "A implica B"</span></li>
+  </ul>
+</div>
+
+<!-- Lleis de Morgan -->
+<div id="morgan" class="subsection-header">
+  <h3>2.3 · Lleis de De Morgan</h3>
+</div>
+
+<p>Les lleis de De Morgan expliquen com es comporta la <strong>negació</strong> quan afecta una unió o una intersecció. Són fonamentals per transformar expressions de probabilitat.</p>
+
+<div class="formula-box">
+  <div class="formula-label">Lleis de De Morgan</div>
+  <div class="formula-main">
+    $$\overline{A \cup B} = \bar{A} \cap \bar{B} \qquad \overline{A \cap B} = \bar{A} \cup \bar{B}$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>1a llei:</strong> "No (A o B)" = "No A i No B"</div>
+    <div class="formula-part"><strong>2a llei:</strong> "No (A i B)" = "No A o No B"</div>
+  </div>
+</div>
+
+<!-- ═══ 1a LLEI: diagrama pas a pas ═══ -->
+<div class="example-box">
+  <div class="box-label">1a Llei de De Morgan · pas a pas — \(\overline{A \cup B} = \bar{A} \cap \bar{B}\)</div>
+  <div class="example-title">"Negar una unió és igual a la intersecció dels complementaris"</div>
+
+  <svg width="100%" viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" style="font-family:'Source Sans 3',sans-serif; margin:8px 0 4px;">
+
+    <!-- ── PAS 1: A ∪ B ── -->
+    <text x="100" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 1 · A ∪ B</text>
+    <!-- espai mostral -->
+    <rect x="20" y="24" width="160" height="110" rx="8" fill="#f0f4ff" stroke="#aaa" stroke-width="1.5"/>
+    <text x="168" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- A -->
+    <circle cx="75" cy="79" r="38" fill="#2471a3" opacity="0.35"/>
+    <!-- B -->
+    <circle cx="115" cy="79" r="38" fill="#2471a3" opacity="0.35"/>
+    <!-- etiquetes -->
+    <text x="62" y="62" font-size="12" fill="#2471a3" font-weight="700">A</text>
+    <text x="122" y="62" font-size="12" fill="#2471a3" font-weight="700">B</text>
+    <text x="100" y="145" text-anchor="middle" font-size="9.5" fill="#2471a3" font-weight="600">zona ombrejada = A ∪ B</text>
+
+    <!-- fletxa → -->
+    <text x="196" y="84" font-size="22" fill="#888">→</text>
+
+    <!-- ── PAS 2: complement(A ∪ B) ── -->
+    <text x="320" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 2 · complement(A∪B)</text>
+    <rect x="240" y="24" width="160" height="110" rx="8" fill="#c0392b" opacity="0.18" stroke="#aaa" stroke-width="1.5"/>
+    <text x="388" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- A ∪ B blanc -->
+    <circle cx="295" cy="79" r="38" fill="#f0f4ff"/>
+    <circle cx="335" cy="79" r="38" fill="#f0f4ff"/>
+    <!-- contorn -->
+    <circle cx="295" cy="79" r="38" fill="none" stroke="#2471a3" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <circle cx="335" cy="79" r="38" fill="none" stroke="#2471a3" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="282" y="62" font-size="12" fill="#2471a3" font-weight="700">A</text>
+    <text x="341" y="62" font-size="12" fill="#2471a3" font-weight="700">B</text>
+    <text x="320" y="145" text-anchor="middle" font-size="9.5" fill="#c0392b" font-weight="600">zona ombrejada = Ā̄(A∪B)</text>
+
+    <!-- fletxa = -->
+    <text x="416" y="84" font-size="22" fill="#888">=</text>
+
+    <!-- ── PAS 3: Ā ∩ B̄ ── -->
+    <text x="575" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 3 · Ā ∩ B̄</text>
+    <!-- espai mostral vermell -->
+    <rect x="495" y="24" width="160" height="110" rx="8" fill="#c0392b" opacity="0.18" stroke="#aaa" stroke-width="1.5"/>
+    <text x="643" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- Ā: tot menys A (ombra fora A) -->
+    <circle cx="550" cy="79" r="38" fill="#f0f4ff"/>
+    <circle cx="590" cy="79" r="38" fill="#f0f4ff"/>
+    <circle cx="550" cy="79" r="38" fill="none" stroke="#2471a3" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <circle cx="590" cy="79" r="38" fill="none" stroke="#2471a3" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="537" y="62" font-size="12" fill="#2471a3" font-weight="700">A</text>
+    <text x="596" y="62" font-size="12" fill="#2471a3" font-weight="700">B</text>
+    <text x="575" y="145" text-anchor="middle" font-size="9.5" fill="#c0392b" font-weight="600">Ā ∩ B̄ = mateixa zona!</text>
+
+    <!-- títol confirmació -->
+    <text x="370" y="195" text-anchor="middle" font-size="11" fill="#1e8449" font-weight="700">✓  La zona ombrejada és idèntica en els passos 2 i 3 → complement(A∪B) = Ā ∩ B̄</text>
+  </svg>
+
+  <div class="theory-box" style="margin-top:8px">
+    <div class="box-label">Interpretació en probabilitat</div>
+    <p>\(\overline{A\cup B}\) = els elements que <em>no pertanyen ni a A ni a B</em>.</p>
+    <p style="margin:0">\(\bar{A} \cap \bar{B}\) = els elements que <em>no són de A</em> I <em>no són de B</em>. És la mateixa cosa dita de dues maneres.</p>
+    <p style="margin-top:8px; font-size:0.88rem; color:var(--muted)">Exemple: si A = "aprova Mates" i B = "aprova Física", llavors \(\overline{A\cup B}\) = "no aprova cap de les dues" = \(\bar{A} \cap \bar{B}\) = "no aprova Mates I no aprova Física".</p>
+  </div>
+</div>
+
+<!-- ═══ 2a LLEI: diagrama pas a pas ═══ -->
+<div class="example-box">
+  <div class="box-label">2a Llei de De Morgan · pas a pas — \(\overline{A \cap B} = \bar{A} \cup \bar{B}\)</div>
+  <div class="example-title">"Negar una intersecció és igual a la unió dels complementaris"</div>
+
+  <svg width="100%" viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg" style="font-family:'Source Sans 3',sans-serif; margin:8px 0 4px;">
+
+    <!-- ── PAS 1: A ∩ B ── -->
+    <text x="100" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 1 · A ∩ B</text>
+    <rect x="20" y="24" width="160" height="110" rx="8" fill="#f0f4ff" stroke="#aaa" stroke-width="1.5"/>
+    <text x="168" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- A i B sense solapament acolorit -->
+    <circle cx="75" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.8"/>
+    <circle cx="115" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.8"/>
+    <!-- intersecció ombrejada -->
+    <clipPath id="clipA1"><circle cx="75" cy="79" r="38"/></clipPath>
+    <circle cx="115" cy="79" r="38" fill="#8e44ad" opacity="0.45" clip-path="url(#clipA1)"/>
+    <text x="62" y="62" font-size="12" fill="#8e44ad" font-weight="700">A</text>
+    <text x="122" y="62" font-size="12" fill="#8e44ad" font-weight="700">B</text>
+    <text x="100" y="145" text-anchor="middle" font-size="9.5" fill="#8e44ad" font-weight="600">zona ombrejada = A ∩ B</text>
+
+    <!-- fletxa → -->
+    <text x="196" y="84" font-size="22" fill="#888">→</text>
+
+    <!-- ── PAS 2: complement(A ∩ B) ── -->
+    <text x="320" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 2 · complement(A∩B)</text>
+    <!-- tot l'espai ombrejat menys la intersecció -->
+    <rect x="240" y="24" width="160" height="110" rx="8" fill="#d4a017" opacity="0.20" stroke="#aaa" stroke-width="1.5"/>
+    <text x="388" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- A i B acolorits però la intersecció blanca -->
+    <circle cx="295" cy="79" r="38" fill="#d4a017" opacity="0.35"/>
+    <circle cx="335" cy="79" r="38" fill="#d4a017" opacity="0.35"/>
+    <!-- tapa intersecció de blanc -->
+    <clipPath id="clipA2"><circle cx="295" cy="79" r="38"/></clipPath>
+    <circle cx="335" cy="79" r="38" fill="#f0f4ff" clip-path="url(#clipA2)"/>
+    <circle cx="295" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <circle cx="335" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="282" y="62" font-size="12" fill="#8e44ad" font-weight="700">A</text>
+    <text x="341" y="62" font-size="12" fill="#8e44ad" font-weight="700">B</text>
+    <text x="320" y="145" text-anchor="middle" font-size="9.5" fill="#c0392b" font-weight="600">zona ombrejada = complement(A∩B)</text>
+
+    <!-- fletxa = -->
+    <text x="416" y="84" font-size="22" fill="#888">=</text>
+
+    <!-- ── PAS 3: Ā ∪ B̄ ── -->
+    <text x="575" y="18" text-anchor="middle" font-size="11" fill="#555" font-weight="700">Pas 3 · Ā ∪ B̄</text>
+    <rect x="495" y="24" width="160" height="110" rx="8" fill="#d4a017" opacity="0.20" stroke="#aaa" stroke-width="1.5"/>
+    <text x="643" y="36" font-size="8.5" fill="#aaa">E</text>
+    <!-- mateix dibuix que pas 2 -->
+    <circle cx="550" cy="79" r="38" fill="#d4a017" opacity="0.35"/>
+    <circle cx="590" cy="79" r="38" fill="#d4a017" opacity="0.35"/>
+    <clipPath id="clipA3"><circle cx="550" cy="79" r="38"/></clipPath>
+    <circle cx="590" cy="79" r="38" fill="#f0f4ff" clip-path="url(#clipA3)"/>
+    <circle cx="550" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <circle cx="590" cy="79" r="38" fill="none" stroke="#8e44ad" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <text x="537" y="62" font-size="12" fill="#8e44ad" font-weight="700">A</text>
+    <text x="596" y="62" font-size="12" fill="#8e44ad" font-weight="700">B</text>
+    <text x="575" y="145" text-anchor="middle" font-size="9.5" fill="#c0392b" font-weight="600">Ā ∪ B̄ = mateixa zona!</text>
+
+    <!-- títol confirmació -->
+    <text x="370" y="195" text-anchor="middle" font-size="11" fill="#1e8449" font-weight="700">✓  La zona ombrejada és idèntica en els passos 2 i 3 → complement(A∩B) = Ā ∪ B̄</text>
+  </svg>
+
+  <div class="theory-box" style="margin-top:8px">
+    <div class="box-label">Interpretació en probabilitat</div>
+    <p>\(\overline{A\cap B}\) = els elements que <em>no pertanyen a la intersecció</em>, és a dir, que no són a A i B alhora.</p>
+    <p style="margin:0">\(\bar{A} \cup \bar{B}\) = els elements que <em>no pertanyen a A</em> O <em>no pertanyen a B</em> (o cap dels dos). Exactament el mateix.</p>
+    <p style="margin-top:8px; font-size:0.88rem; color:var(--muted)">Exemple: si A = "plou" i B = "fa fred", llavors \(\overline{A\cap B}\) = "no és cert que plogui i faci fred alhora" = \(\bar{A} \cup \bar{B}\) = "no plou O no fa fred".</p>
+  </div>
+</div>
+
+<div class="warning-box">
+  <div class="box-label">⚠ Resum mnemotècnic de De Morgan</div>
+  <p>Quan <strong>negues</strong> una expressió: <strong>canvies ∪ per ∩</strong> (o al revés) i <strong>negues cada part</strong> individualment.</p>
+  <p style="margin:4px 0 0; font-size:0.9rem">
+    \(\overline{A \cup B}\) → canviem ∪ per ∩, neguem A i B: \(\bar{A} \cap \bar{B}\)<br>
+    \(\overline{A \cap B}\) → canviem ∩ per ∪, neguem A i B: \(\bar{A} \cup \bar{B}\)
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 3 · PROBABILITAT                  -->
+<!-- ══════════════════════════════════════════ -->
+<hr class="section-divider">
+<div id="probabilitat" class="section-header">
+  <div class="section-num">Secció 3 · Probabilitat clàssica</div>
+  <h2>Probabilitat: propietats i operacions</h2>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Axiomes de Kolmogorov</div>
+  <ul class="rules-list">
+    <li><span class="rule-badge">K1</span><span>\(P(A) \geq 0\) per a qualsevol esdeveniment A.</span></li>
+    <li><span class="rule-badge">K2</span><span>\(P(E) = 1\) — la probabilitat de l'espai mostral és 1.</span></li>
+    <li><span class="rule-badge">K3</span><span>Si A i B són incompatibles: \(P(A \cup B) = P(A) + P(B)\).</span></li>
+  </ul>
+</div>
+
+<div class="formula-box">
+  <div class="formula-label">Regles de probabilitat derivades</div>
+  <div class="formula-main">
+    $$P(\bar{A}) = 1 - P(A) \qquad P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>Complementari:</strong> P(no A) = 1 − P(A)</div>
+    <div class="formula-part"><strong>Addició general:</strong> per a events compatibles</div>
+    <div class="formula-part"><strong>Addició simple:</strong> si A ∩ B = ∅ llavors −P(A∩B)=0</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Esport i dieta</div>
+  <div class="example-title">En una classe de Batxillerat, si triem un alumne a l'atzar, sabem que la probabilitat que faci esport regularment és del 60%, que segueixi una dieta saludable és del 50%, i que faci les dues coses alhora és del 30%. Calcula les probabilitats següents.</div>
+  <ul class="solution-steps">
+    <li><strong>Dades:</strong> \(P(\text{esport})=0{,}6\), \(P(\text{dieta})=0{,}5\), \(P(\text{esport} \cap \text{dieta})=0{,}3\)</li>
+    <li><strong>P(no esport):</strong> \(P(\bar{A}) = 1 - 0{,}6 = \mathbf{0{,}4}\)</li>
+    <li><strong>P(esport o dieta):</strong> \(P(A \cup B) = 0{,}6 + 0{,}5 - 0{,}3 = \mathbf{0{,}8}\)</li>
+    <li><strong>P(no (esport i dieta)):</strong> \(P(\overline{A \cap B}) = 1 - P(A \cap B) = 1 - 0{,}3 = \mathbf{0{,}7}\)</li>
+  </ul>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 6 · Examens de Batxillerat</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">En un grup de Batxillerat, si triem un alumne a l'atzar, la probabilitat que aprovi Matemàtiques és del 70%, que aprovi Llengua és del 60%, i que aprovi les dues assignatures alhora és del 40%. Calcula les probabilitats següents.</div>
+      <ul class="exercise-questions">
+        <li>P(no aprova Mates)</li>
+        <li>P(aprova Mates o Llengua)</li>
+        <li>P(no aprova ni Mates ni Llengua)</li>
+        <li>P(aprova Mates però no Llengua)</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <!-- SVG: diagrama de Venn -->
+      <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+        <!-- cercle Mates -->
+        <circle cx="48" cy="55" r="36" fill="#2471a3" opacity="0.25" stroke="#2471a3" stroke-width="2"/>
+        <!-- cercle Llengua -->
+        <circle cx="82" cy="55" r="36" fill="#c0392b" opacity="0.25" stroke="#c0392b" stroke-width="2"/>
+        <!-- intersecció highlight -->
+        <clipPath id="cl1"><circle cx="48" cy="55" r="36"/></clipPath>
+        <circle cx="82" cy="55" r="36" fill="rgba(100,80,180,0.3)" clip-path="url(#cl1)"/>
+        <!-- etiquetes -->
+        <text x="35" y="55" text-anchor="middle" font-size="9" fill="#2471a3" font-weight="700">M</text>
+        <text x="35" y="65" text-anchor="middle" font-size="8" fill="#2471a3">0,3</text>
+        <text x="95" y="55" text-anchor="middle" font-size="9" fill="#c0392b" font-weight="700">L</text>
+        <text x="95" y="65" text-anchor="middle" font-size="8" fill="#c0392b">0,2</text>
+        <text x="65" y="50" text-anchor="middle" font-size="8.5" fill="#555" font-weight="700">∩</text>
+        <text x="65" y="62" text-anchor="middle" font-size="8" fill="#555">0,4</text>
+        <!-- títol -->
+        <text x="65" y="102" text-anchor="middle" font-size="7.5" fill="#888">Diagrama de Venn</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>Dades:</strong> \(P(M)=0{,}7\), \(P(L)=0{,}6\), \(P(M \cap L)=0{,}4\)</p>
+      <p><strong>a)</strong> \(P(\bar{M}) = 1 - 0{,}7 = \mathbf{0{,}3}\)</p>
+      <p><strong>b)</strong> \(P(M \cup L) = 0{,}7 + 0{,}6 - 0{,}4 = \mathbf{0{,}9}\)</p>
+      <p><strong>c)</strong> "Ni Mates ni Llengua" = \(\overline{M \cup L}\) → \(P = 1 - 0{,}9 = \mathbf{0{,}1}\)</p>
+      <p><strong>d)</strong> "Mates però no Llengua" = \(M \cap \bar{L}\). Usem: \(P(M) = P(M \cap L) + P(M \cap \bar{L})\)</p>
+      $$P(M \cap \bar{L}) = P(M) - P(M \cap L) = 0{,}7 - 0{,}4 = \mathbf{0{,}3}$$
+    </div>
+  </div>
+</div>
+
+<!-- LAPLACE -->
+<div id="laplace" class="subsection-header">
+  <h3>3.1 · Regla de Laplace</h3>
+</div>
+<p>S'aplica quan tots els casos elementals són <strong>equiprobables</strong> (experiment regular).</p>
+
+<div class="formula-box">
+  <div class="formula-label">Regla de Laplace</div>
+  <div class="formula-main">
+    $$P(A) = \frac{\#\text{casos favorables a } A}{\#\text{casos possibles (espai mostral)}}$$
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Urna de colors</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="example-title">En una urna: 3 boles blanques, 4 grogues i 2 negres (mateixa mida). Probabilitat de treure una blanca?</div>
+      <ul class="solution-steps">
+        <li>Total de boles: \(3+4+2 = 9\). Equiprobables (mateixa mida).</li>
+        <li>$$P(\text{blanca}) = \frac{3}{9} = \frac{1}{3} \approx 0{,}333 = 33{,}3\%$$</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="115" height="115" viewBox="0 0 115 115" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="57" cy="98" rx="38" ry="10" fill="#8B6914" opacity="0.4"/>
+        <path d="M20,40 Q18,98 57,105 Q96,98 95,40 Q96,20 57,18 Q18,20 20,40Z" fill="#fff" stroke="#8B6914" stroke-width="2.5"/>
+        <!-- blanques -->
+        <circle cx="37" cy="75" r="10" fill="white" stroke="#ccc" stroke-width="1.5"/>
+        <circle cx="57" cy="82" r="10" fill="white" stroke="#ccc" stroke-width="1.5"/>
+        <circle cx="77" cy="75" r="10" fill="white" stroke="#ccc" stroke-width="1.5"/>
+        <!-- grogues -->
+        <circle cx="32" cy="55" r="9" fill="#d4a017"/>
+        <circle cx="48" cy="62" r="9" fill="#d4a017"/>
+        <circle cx="66" cy="62" r="9" fill="#d4a017"/>
+        <circle cx="82" cy="55" r="9" fill="#d4a017"/>
+        <!-- negres -->
+        <circle cx="42" cy="40" r="9" fill="#1c1c2e"/>
+        <circle cx="72" cy="40" r="9" fill="#1c1c2e"/>
+        <rect x="45" y="10" width="24" height="14" rx="4" fill="#d4a017" opacity="0.6" stroke="#8B6914" stroke-width="1.5"/>
+        <text x="57" y="112" text-anchor="middle" font-size="8" fill="#8B6914" font-weight="600">9 boles</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 6b · Dues urnes</div>
+  <div class="exercise-title">En un laboratori hi ha dues urnes. L'urna A conté 4 boles vermelles i 2 blaves; l'urna B conté 3 boles vermelles i 5 blaves. Es tria una de les dues urnes a l'atzar (amb la mateixa probabilitat) i s'extreu una bola.</div>
+  <ul class="exercise-questions">
+    <li>P(bola vermella de l'urna A).</li>
+    <li>P(bola blava de l'urna B).</li>
+    <li>P(obtenir bola vermella) — usa probabilitat total.</li>
+  </ul>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> \(P(R \mid A) = 4/6 = \mathbf{2/3}\)</p>
+      <p><strong>b)</strong> \(P(B \mid B_{\text{urna}}) = 5/8\)</p>
+      <p><strong>c)</strong> \(P(\text{urna A}) = P(\text{urna B}) = 1/2\). Probabilitat total:</p>
+      $$P(R) = P(A) \cdot P(R \mid A) + P(B_{\text{urna}}) \cdot P(R \mid B) = \frac{1}{2} \cdot \frac{4}{6} + \frac{1}{2} \cdot \frac{3}{8} = \frac{1}{3} + \frac{3}{16} = \frac{16+9}{48} = \mathbf{\frac{25}{48} \approx 52{,}1\%}$$
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 4 · PROBABILITAT CONDICIONADA     -->
+<!-- ══════════════════════════════════════════ -->
+<hr class="section-divider">
+<div id="condicionada" class="section-header">
+  <div class="section-num">Secció 4 · Probabilitat condicionada</div>
+  <h2>Probabilitat condicionada</h2>
+</div>
+
+<p>La probabilitat de l'esdeveniment B <strong>sabent que ha tingut lloc</strong> l'esdeveniment A. El coneixement d'A <em>redueix</em> l'espai mostral a A.</p>
+
+<div class="formula-box">
+  <div class="formula-label">Definició · Probabilitat condicionada</div>
+  <div class="formula-main">
+    $$P(B \mid A) = \frac{P(A \cap B)}{P(A)} \qquad \text{on } P(A) > 0$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>Numerador:</strong> P(A i B alhora)</div>
+    <div class="formula-part"><strong>Denominador:</strong> P(que hagi passat A)</div>
+    <div class="formula-part"><strong>Equivalent:</strong> P(A∩B) = P(A)·P(B|A)</div>
+  </div>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Protocol per calcular P(B|A)</div>
+  <div class="steps-grid">
+    <div class="step-num">1</div>
+    <div class="step-content"><strong>Identifica</strong> els dos esdeveniments A (condició) i B (l'event que ens demanen).</div>
+    <div class="step-num">2</div>
+    <div class="step-content"><strong>Calcula</strong> P(A∩B): la probabilitat que ocorrin tots dos alhora.</div>
+    <div class="step-num">3</div>
+    <div class="step-content"><strong>Calcula</strong> P(A): la probabilitat de la condició.</div>
+    <div class="step-num">4</div>
+    <div class="step-content"><strong>Aplica</strong> la fórmula: P(B|A) = P(A∩B) / P(A).</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Classe d'idiomes</div>
+  <div class="example-title">30 estudiants: 18 fan anglès (A), 12 fan francès (B), 8 fan els dos idiomes.</div>
+  <ul class="solution-steps">
+    <li>\(P(A)=18/30=3/5,\; P(B)=12/30=2/5,\; P(A \cap B)=8/30=4/15\)</li>
+    <li><strong>P(francès | anglès):</strong> $$P(B \mid A) = \frac{P(A\cap B)}{P(A)} = \frac{8/30}{18/30} = \frac{8}{18} = \mathbf{\frac{4}{9} \approx 44{,}4\%}$$</li>
+    <li><strong>P(anglès | no francès):</strong> No-F = 18, Anglès i no-F = 10. \(P = 10/18 = \mathbf{5/9 \approx 55{,}6\%}\)</li>
+  </ul>
+</div>
+
+<!-- TAULES DE CONTINGÈNCIA -->
+<div id="contingencia" class="subsection-header">
+  <h3>4.1 · Taules de contingència</h3>
+</div>
+<p>Taula de doble entrada per organitzar dades de <strong>2 característiques</strong> i calcular probabilitats condicionades de forma sistemàtica.</p>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Mascotes al barri</div>
+  <div class="example-title">35 cases: 20 tenen gos, 12 gat, 8 gat i gos.</div>
+
+  <table class="prob-table">
+    <thead>
+      <tr><th></th><th>Gat (G)</th><th>No gat (G̅)</th><th>Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Gos (D)</strong></td><td>8</td><td>12</td><td>20</td></tr>
+      <tr><td><strong>No gos (D̅)</strong></td><td>4</td><td>11</td><td>15</td></tr>
+      <tr class="total-row"><td>Total</td><td>12</td><td>23</td><td>35</td></tr>
+    </tbody>
+  </table>
+
+  <ul class="solution-steps">
+    <li>\(P(\text{gos} \mid \text{gat}) = 8/12 = \mathbf{2/3 \approx 66{,}7\%}\)</li>
+    <li>\(P(\text{gat} \mid \text{gos}) = 8/20 = \mathbf{2/5 = 40\%}\)</li>
+    <li>\(P(\text{ni gat ni gos}) = 11/35 \approx \mathbf{31{,}4\%}\)</li>
+  </ul>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 7 · Enquesta de transport</div>
+  <div class="exercise-title">En una enquesta a 200 persones sobre el seu transport habitual:</div>
+  <table class="prob-table" style="margin:12px 0">
+    <thead><tr><th></th><th>Cotxe</th><th>Transport públic</th><th>Bicicleta</th><th>Total</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Dones</strong></td><td>40</td><td>55</td><td>25</td><td>120</td></tr>
+      <tr><td><strong>Homes</strong></td><td>50</td><td>20</td><td>10</td><td>80</td></tr>
+      <tr class="total-row"><td>Total</td><td>90</td><td>75</td><td>35</td><td>200</td></tr>
+    </tbody>
+  </table>
+  <ul class="exercise-questions">
+    <li>P(cotxe | dona)</li>
+    <li>P(home | transport públic)</li>
+    <li>P(bicicleta)</li>
+    <li>P(dona | no cotxe)</li>
+  </ul>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> \(P(C \mid D) = 40/120 = \mathbf{1/3 \approx 33{,}3\%}\)</p>
+      <p><strong>b)</strong> \(P(H \mid TP) = 20/75 = \mathbf{4/15 \approx 26{,}7\%}\)</p>
+      <p><strong>c)</strong> \(P(B) = 35/200 = \mathbf{7/40 = 17{,}5\%}\)</p>
+      <p><strong>d)</strong> No cotxe = 110 persones. Dones no cotxe = 80. \(P(D \mid \bar{C}) = 80/110 = \mathbf{8/11 \approx 72{,}7\%}\)</p>
+    </div>
+  </div>
+</div>
+
+<!-- INDEPENDÈNCIA -->
+<div id="independencia" class="subsection-header">
+  <h3>4.2 · Dependència i independència</h3>
+</div>
+
+<div class="card-grid">
+  <div class="card-item">
+    <div class="card-label">Dependents</div>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:8px">Saber si ha passat A <em>canvia</em> la prob. de B.</p>
+    <div class="card-formula">$$P(B \mid A) \neq P(B)$$</div>
+    <p style="font-size:0.85rem; margin-top:8px"><strong>Producte:</strong> \(P(A \cap B) = P(A) \cdot P(B \mid A)\)</p>
+  </div>
+  <div class="card-item">
+    <div class="card-label">Independents</div>
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:8px">Saber si ha passat A <em>no canvia</em> la prob. de B.</p>
+    <div class="card-formula">$$P(B \mid A) = P(B)$$</div>
+    <p style="font-size:0.85rem; margin-top:8px"><strong>Producte:</strong> \(P(A \cap B) = P(A) \cdot P(B)\)</p>
+  </div>
+</div>
+
+<div class="warning-box">
+  <div class="box-label">⚠ No confondre: independents ≠ incompatibles!</div>
+  <p><strong>Independents:</strong> poden ocórrer alhora, però saber un no informa de l'altre. \(P(A \cap B) = P(A) \cdot P(B)\)</p>
+  <p style="margin:0"><strong>Incompatibles:</strong> NO poden ocórrer alhora. \(A \cap B = \emptyset \Rightarrow P(A \cap B) = 0\). Si P(A)>0 i P(B)>0, dos esdeveniments incompatibles <em>no poden</em> ser independents.</p>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 7b · Independència en llençament de daus</div>
+  <div class="exercise-title">Llençem dos daus equilibrats. Sigui A = "primer dau dóna 6" i B = "suma dels daus és 8".</div>
+  <ul class="exercise-questions">
+    <li>Calcula P(A), P(B) i P(A∩B).</li>
+    <li>Determina si A i B són independents.</li>
+  </ul>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a)</strong> \(P(A) = 6/36 = 1/6\). Per B (suma=8): parelles (2,6),(3,5),(4,4),(5,3),(6,2) → 5 casos. \(P(B)=5/36\).</p>
+      <p>\(A \cap B\) = primer dau 6 i suma 8 → única parella (6,2). \(P(A \cap B) = 1/36\).</p>
+      <p><strong>b)</strong> Comprovem si \(P(A) \cdot P(B) = P(A \cap B)\):</p>
+      $$P(A) \cdot P(B) = \frac{1}{6} \cdot \frac{5}{36} = \frac{5}{216} \neq \frac{1}{36} = \frac{6}{216} = P(A \cap B)$$
+      <p><strong>A i B NO són independents</strong>: saber que el primer dau ha donat 6 augmenta la probabilitat que la suma sigui 8 (de 5/36 a 1/6 = 6/36).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 5 · PROBABILITAT TOTAL             -->
+<!-- ══════════════════════════════════════════ -->
+<hr class="section-divider">
+<div id="prob-total" class="section-header">
+  <div class="section-num">Secció 5 · Probabilitat total</div>
+  <h2>Teorema de la probabilitat total</h2>
+</div>
+
+<p>Quan l'esdeveniment B pot produir-se a través de <strong>diversos camins</strong> (una partició de l'espai mostral A₁, A₂, …, Aₙ), la probabilitat total de B es calcula com la suma ponderada de les probabilitats condicionades.</p>
+
+<div class="formula-box">
+  <div class="formula-label">Teorema de la probabilitat total</div>
+  <div class="formula-main">
+    $$P(B) = \sum_{i=1}^{n} P(A_i) \cdot P(B \mid A_i)$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>Condició:</strong> A₁,…,Aₙ partició de E (incompatibles, unió = E)</div>
+    <div class="formula-part"><strong>Cas 2 causes:</strong> P(B) = P(A)·P(B|A) + P(Ā)·P(B|Ā)</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Empresa de cargols</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="example-title">Una empresa rep cargols de 2 proveïdors: A₁ → 70% (3% defectuosos), A₂ → 30% (6% defectuosos). Probabilitat que un cargol sigui defectuós?</div>
+      <ul class="solution-steps">
+        <li>\(P(A_1)=0{,}7,\; P(D \mid A_1)=0{,}03\) i \(P(A_2)=0{,}3,\; P(D \mid A_2)=0{,}06\)</li>
+        <li>$$P(D) = 0{,}7 \cdot 0{,}03 + 0{,}3 \cdot 0{,}06 = 0{,}021 + 0{,}018$$</li>
+        <li><span class="result-highlight">P(defectuós) = 0,039 = 3,9%</span></li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="115" height="110" viewBox="0 0 115 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="45" width="50" height="50" fill="#ddd8cf" stroke="#8B6914" stroke-width="1.5"/>
+        <rect x="60" y="55" width="40" height="40" fill="#ddd8cf" stroke="#8B6914" stroke-width="1.5"/>
+        <polygon points="7,45 60,45 60,30" fill="#c0392b" opacity="0.7"/>
+        <polygon points="58,55 102,55 102,40" fill="#2471a3" opacity="0.7"/>
+        <rect x="18" y="28" width="8" height="18" fill="#6c757d"/>
+        <rect x="30" y="22" width="8" height="24" fill="#6c757d"/>
+        <ellipse cx="22" cy="24" rx="5" ry="4" fill="rgba(200,200,200,0.5)"/>
+        <ellipse cx="34" cy="17" rx="5" ry="5" fill="rgba(200,200,200,0.4)"/>
+        <rect x="16" y="60" width="12" height="10" rx="2" fill="#7ec8f0" opacity="0.7"/>
+        <rect x="34" y="60" width="12" height="10" rx="2" fill="#7ec8f0" opacity="0.7"/>
+        <rect x="65" y="65" width="10" height="8" rx="1" fill="#7ec8f0" opacity="0.7"/>
+        <rect x="80" y="65" width="10" height="8" rx="1" fill="#7ec8f0" opacity="0.7"/>
+        <rect x="26" y="78" width="14" height="17" rx="2" fill="#8B6914"/>
+        <text x="35" y="105" text-anchor="middle" font-size="7.5" fill="#1c1c2e" font-weight="600">A₁: 70%</text>
+        <text x="80" y="100" text-anchor="middle" font-size="7.5" fill="#1c1c2e" font-weight="600">A₂: 30%</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 8 · Laboratoris d'anàlisi</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">Un hospital rep anàlisis de sang de tres laboratoris externs. El laboratori L₁ proporciona el 50% de les mostres, amb un 2% d'errors; L₂ n'aporta el 30%, amb un 5% d'errors; i L₃ n'aporta el 20% restant, amb un 3% d'errors. Triem un anàlisi a l'atzar.</div>
+      <ul class="exercise-questions">
+        <li>Identifica la partició de l'espai mostral.</li>
+        <li>Aplica el teorema de la probabilitat total per trobar el % d'errors global.</li>
+        <li>Si es tria un anàlisi a l'atzar i és correcte, quina és la probabilitat que vingui de L₁? (Bayes)</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+        <!-- edifici hospital -->
+        <rect x="15" y="30" width="80" height="65" rx="4" fill="#eaf2fb" stroke="#2471a3" stroke-width="2"/>
+        <rect x="47" y="10" width="16" height="40" rx="3" fill="#c0392b"/>
+        <rect x="35" y="22" width="40" height="16" rx="3" fill="#c0392b"/>
+        <rect x="22" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="47" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="72" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="22" y="65" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="72" y="65" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="44" y="82" width="22" height="13" rx="3" fill="#2471a3"/>
+        <text x="55" y="105" text-anchor="middle" font-size="7" fill="#2471a3" font-weight="600">L₁+L₂+L₃</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>Dades:</strong> \(P(L_1)=0{,}5\), \(P(L_2)=0{,}3\), \(P(L_3)=0{,}2\) &nbsp;·&nbsp; \(P(E \mid L_1)=0{,}02\), \(P(E \mid L_2)=0{,}05\), \(P(E \mid L_3)=0{,}03\)</p>
+      <p><strong>a)</strong> L₁∪L₂∪L₃ = E i sont incompatibles → partició vàlida. \(P(L_1)=0{,}5,\; P(L_2)=0{,}3,\; P(L_3)=0{,}2\)</p>
+      <p><strong>b) Prob. total:</strong></p>
+      $$P(E) = 0{,}50 \cdot 0{,}02 + 0{,}30 \cdot 0{,}05 + 0{,}20 \cdot 0{,}03 = 0{,}01 + 0{,}015 + 0{,}006 = \mathbf{0{,}031 = 3{,}1\%}$$
+      <p><strong>c) Bayes — P(L₁ | correcte):</strong></p>
+      <p>\(P(\text{correcte}) = 1 - 0{,}031 = 0{,}969\). \(P(\text{correcte} \mid L_1) = 1 - 0{,}02 = 0{,}98\)</p>
+      $$P(L_1 \mid \text{correcte}) = \frac{0{,}5 \cdot 0{,}98}{0{,}969} = \frac{0{,}49}{0{,}969} \approx \mathbf{50{,}6\%}$$
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SECCIÓ 6 · TEOREMA DE BAYES              -->
+<!-- ══════════════════════════════════════════ -->
+<hr class="section-divider">
+<div id="bayes" class="section-header">
+  <div class="section-num">Secció 6 · Teorema de Bayes</div>
+  <h2>Teorema de Bayes</h2>
+</div>
+
+<p>Permet <strong>invertir la condició</strong>: a partir de \(P(B \mid A_i)\) calcular \(P(A_i \mid B)\). És la "probabilitat inversa": vas dels efectes a les causes.</p>
+
+<div class="theory-box">
+  <div class="box-label">Quan aplicar Bayes?</div>
+  <p>Quan et <strong>donen</strong> \(P(B \mid A)\) i et <strong>demanen</strong> \(P(A \mid B)\). Es va "al revés" de les dades.</p>
+  <p style="font-size:0.88rem; color:var(--muted); margin-bottom:0">Exemples típics: sabent que és defectuós, de quina màquina ve? · Sabent que el test és positiu, és realment malalt?</p>
+</div>
+
+<div class="formula-box">
+  <div class="formula-label">Teorema de Bayes</div>
+  <div class="formula-main">
+    $$P(A_i \mid B) = \frac{P(A_i) \cdot P(B \mid A_i)}{\displaystyle\sum_{j=1}^{n} P(A_j) \cdot P(B \mid A_j)}$$
+  </div>
+  <div class="formula-parts">
+    <div class="formula-part"><strong>Numerador:</strong> P(Aᵢ ∩ B)</div>
+    <div class="formula-part"><strong>Denominador:</strong> P(B) — probabilitat total</div>
+    <div class="formula-part"><strong>Nota:</strong> el denominador és la probabilitat total de B</div>
+  </div>
+</div>
+
+<div class="theory-box">
+  <div class="box-label">Protocol per aplicar Bayes — Pas a pas</div>
+  <div class="steps-grid">
+    <div class="step-num">1</div>
+    <div class="step-content"><strong>Identifica</strong> la partició: A₁, A₂, … (causes) i l'event B (efecte observat).</div>
+    <div class="step-num">2</div>
+    <div class="step-content"><strong>Calcula P(B)</strong> usant el teorema de la probabilitat total: P(B) = ΣP(Aᵢ)·P(B|Aᵢ).</div>
+    <div class="step-num">3</div>
+    <div class="step-content"><strong>Aplica Bayes</strong>: P(Aᵢ|B) = P(Aᵢ)·P(B|Aᵢ) / P(B).</div>
+    <div class="step-num">4</div>
+    <div class="step-content"><strong>Verifica</strong>: la suma P(A₁|B) + P(A₂|B) + … + P(Aₙ|B) = 1.</div>
+  </div>
+</div>
+
+<div class="example-box">
+  <div class="box-label">Exemple resolt · Control de qualitat</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="example-title">Dues màquines: M₁ (60%, 2% defectuoses), M₂ (40%, 5% defectuoses). Sabent que una peça és defectuosa, quina és la prob. que vingui de M₁?</div>
+      <ul class="solution-steps">
+        <li><strong>P(D) prob. total:</strong> \(P(D) = 0{,}6 \cdot 0{,}02 + 0{,}4 \cdot 0{,}05 = 0{,}012 + 0{,}020 = 0{,}032\)</li>
+        <li><strong>Bayes:</strong> $$P(M_1 \mid D) = \frac{0{,}6 \cdot 0{,}02}{0{,}032} = \frac{0{,}012}{0{,}032} = 0{,}375$$</li>
+        <li><span class="result-highlight">P(M₁|D) = 0,375 = 37,5%</span> &nbsp; <span class="result-highlight">P(M₂|D) = 62,5%</span></li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="115" height="110" viewBox="0 0 115 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="25" width="45" height="55" rx="5" fill="#2471a3" opacity="0.85"/>
+        <rect x="10" y="30" width="35" height="25" rx="3" fill="rgba(255,255,255,0.1)"/>
+        <text x="27" y="47" text-anchor="middle" font-size="8" fill="white" font-weight="700">M₁</text>
+        <text x="27" y="57" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.7)">60%</text>
+        <circle cx="20" cy="68" r="5" fill="#d4a017"/>
+        <circle cx="35" cy="68" r="5" fill="#d4a017"/>
+        <rect x="65" y="35" width="45" height="45" rx="5" fill="#c0392b" opacity="0.85"/>
+        <rect x="70" y="40" width="35" height="20" rx="3" fill="rgba(255,255,255,0.1)"/>
+        <text x="87" y="54" text-anchor="middle" font-size="8" fill="white" font-weight="700">M₂</text>
+        <text x="87" y="64" text-anchor="middle" font-size="7" fill="rgba(255,255,255,0.7)">40%</text>
+        <rect x="5" y="80" width="105" height="8" rx="3" fill="#6c757d"/>
+        <circle cx="20" cy="84" r="5" fill="#444"/>
+        <circle cx="50" cy="84" r="5" fill="#444"/>
+        <circle cx="80" cy="84" r="5" fill="#444"/>
+        <circle cx="105" cy="84" r="5" fill="#444"/>
+        <rect x="38" y="75" width="10" height="7" rx="2" fill="#d4a017"/>
+        <rect x="60" y="75" width="10" height="7" rx="2" fill="#1e8449"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 9 · Malaltia i diagnòstic</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">El 4% de la població té una malaltia. La prova mèdica dóna positiu al 95% dels malalts i al 8% dels sans (fals positiu). Triem una persona a l'atzar i li fem la prova.</div>
+      <ul class="exercise-questions">
+        <li>P(resultat positiu) — Usa el teorema de la prob. total.</li>
+        <li>Sabent que la prova és positiva, P(persona realment malalta) — Bayes.</li>
+        <li>Sabent que la persona no està malalta, P(prova negativa).</li>
+        <li>Com interpretes el resultat de l'apartat b)? Per què és tan baix malgrat que la prova és molt fiable?</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+        <rect x="15" y="30" width="80" height="65" rx="4" fill="#eaf2fb" stroke="#2471a3" stroke-width="2"/>
+        <rect x="47" y="10" width="16" height="40" rx="3" fill="#c0392b"/>
+        <rect x="35" y="22" width="40" height="16" rx="3" fill="#c0392b"/>
+        <rect x="22" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="47" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="72" y="45" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="22" y="65" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="72" y="65" width="14" height="12" rx="2" fill="#7ec8f0"/>
+        <rect x="44" y="82" width="22" height="13" rx="3" fill="#2471a3"/>
+        <text x="55" y="105" text-anchor="middle" font-size="7" fill="#2471a3" font-weight="600">P(M)=4%</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>Dades:</strong> \(P(M)=0{,}04\), \(P(+\mid M)=0{,}95\), \(P(\bar{M})=0{,}96\), \(P(+\mid\bar{M})=0{,}08\)</p>
+      <p><strong>a) P(+) — Prob. total:</strong></p>
+      $$P(+) = 0{,}04 \cdot 0{,}95 + 0{,}96 \cdot 0{,}08 = 0{,}038 + 0{,}0768 = \mathbf{0{,}1148 = 11{,}48\%}$$
+      <p><strong>b) P(M|+) — Bayes:</strong></p>
+      $$P(M \mid +) = \frac{0{,}04 \cdot 0{,}95}{0{,}1148} = \frac{0{,}038}{0{,}1148} \approx \mathbf{0{,}331 = 33{,}1\%}$$
+      <p><strong>c) P(−|no malalt):</strong></p>
+      $$P(- \mid \bar{M}) = 1 - P(+ \mid \bar{M}) = 1 - 0{,}08 = \mathbf{0{,}92 = 92\%}$$
+      <p><strong>d) Interpretació:</strong> Tot i que la prova té 95% de sensibilitat, la malaltia és <em>molt poc freqüent</em> (4%). Quan la prevalença és baixa, els falsos positius (sans que donen positiu: 96%·8%≈7,7%) superen els vertaders positius (malalts que donen positiu: 4%·95%≈3,8%). Això s'anomena la <strong>paradoxa del test rar</strong> o "base rate fallacy".</p>
+    </div>
+  </div>
+</div>
+
+<div class="exercise-box">
+  <div class="box-label">Exercici 10 · Fàbrica de bombetes</div>
+  <div class="illus-row">
+    <div class="illus-text">
+      <div class="exercise-title">L₁ fabrica el 65% de bombetes (2% defectuoses). L₂ fabrica el 35% restant (6% defectuoses). Es tria una bombeta a l'atzar.</div>
+      <ul class="exercise-questions">
+        <li>Probabilitat que sigui defectuosa.</li>
+        <li>Sabent que és defectuosa, probabilitat que vingui de L₂.</li>
+        <li>Sabent que ve de L₁, probabilitat que <em>no</em> sigui defectuosa.</li>
+        <li>Comprova que P(L₁|D) + P(L₂|D) = 1.</li>
+      </ul>
+    </div>
+    <div class="illus-fig">
+      <!-- SVG: bombeta -->
+      <svg width="100" height="115" viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg">
+        <!-- casquet -->
+        <rect x="36" y="76" width="28" height="8" rx="2" fill="#888"/>
+        <rect x="38" y="84" width="24" height="6" rx="1" fill="#aaa"/>
+        <rect x="38" y="90" width="24" height="5" rx="1" fill="#888"/>
+        <rect x="40" y="95" width="20" height="5" rx="1" fill="#aaa"/>
+        <!-- vidre -->
+        <ellipse cx="50" cy="55" rx="28" ry="30" fill="#fef9ec" stroke="#d4a017" stroke-width="2"/>
+        <!-- filament encès -->
+        <path d="M42,65 Q45,50 50,45 Q55,50 58,65" stroke="#d4a017" stroke-width="2" fill="none"/>
+        <circle cx="50" cy="45" r="4" fill="#d4a017" opacity="0.8"/>
+        <!-- brillantor -->
+        <line x1="50" y1="18" x2="50" y2="12" stroke="#d4a017" stroke-width="2" stroke-linecap="round"/>
+        <line x1="72" y1="25" x2="76" y2="21" stroke="#d4a017" stroke-width="2" stroke-linecap="round"/>
+        <line x1="28" y1="25" x2="24" y2="21" stroke="#d4a017" stroke-width="2" stroke-linecap="round"/>
+        <text x="50" y="110" text-anchor="middle" font-size="7.5" fill="#888">L₁: 65%, L₂: 35%</text>
+      </svg>
+    </div>
+  </div>
+  <div class="solution-toggle">
+    <button class="toggle-btn" onclick="toggleSolution(this)">▶ Veure solució</button>
+    <div class="solution-content">
+      <div class="sol-label">Solució</div>
+      <p><strong>a) Prob. total:</strong></p>
+      $$P(D) = 0{,}65 \cdot 0{,}02 + 0{,}35 \cdot 0{,}06 = 0{,}013 + 0{,}021 = \mathbf{0{,}034 = 3{,}4\%}$$
+      <p><strong>b) Bayes:</strong></p>
+      $$P(L_2 \mid D) = \frac{0{,}35 \cdot 0{,}06}{0{,}034} = \frac{0{,}021}{0{,}034} \approx \mathbf{0{,}6176 = 61{,}76\%}$$
+      <p><strong>c) Probabilitat condicionada directa:</strong></p>
+      $$P(\bar{D} \mid L_1) = 1 - P(D \mid L_1) = 1 - 0{,}02 = \mathbf{0{,}98 = 98\%}$$
+      <p><strong>d) Verificació:</strong></p>
+      $$P(L_1 \mid D) = \frac{0{,}65 \cdot 0{,}02}{0{,}034} = \frac{0{,}013}{0{,}034} \approx 0{,}3824$$
+      $$P(L_1 \mid D) + P(L_2 \mid D) = 0{,}3824 + 0{,}6176 = \mathbf{1} \checkmark$$
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- RESUM FINAL                               -->
+<!-- ══════════════════════════════════════════ -->
+<div id="resum" class="summary-box" style="margin-top:56px">
+  <div class="box-label">Resum Global · Guia ràpida de fórmules</div>
+  <h4>Totes les fórmules en un cop d'ull</h4>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <div class="si-label">Variació sense repetició</div>
+      <div class="si-val">V(n,m) = n!/(n−m)!</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Variació amb repetició</div>
+      <div class="si-val">VR(n,m) = nᵐ</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Permutacions</div>
+      <div class="si-val">P(n) = n!</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Combinacions</div>
+      <div class="si-val">C(n,m) = n! / m!(n−m)!</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Complementari</div>
+      <div class="si-val">P(Ā) = 1 − P(A)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Addició general</div>
+      <div class="si-val">P(A∪B) = P(A)+P(B)−P(A∩B)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Probabilitat condicionada</div>
+      <div class="si-val">P(B|A) = P(A∩B) / P(A)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Independència</div>
+      <div class="si-val">P(A∩B) = P(A)·P(B)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Probabilitat total</div>
+      <div class="si-val">P(B) = Σ P(Aᵢ)·P(B|Aᵢ)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">Teorema de Bayes</div>
+      <div class="si-val">P(Aᵢ|B) = P(Aᵢ)·P(B|Aᵢ) / P(B)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">De Morgan · 1a</div>
+      <div class="si-val">\(\overline{A\cup B} = \bar{A} \cap \bar{B}\)</div>
+    </div>
+    <div class="summary-item">
+      <div class="si-label">De Morgan · 2a</div>
+      <div class="si-val">\(\overline{A\cap B} = \bar{A} \cup \bar{B}\)</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+</div><!-- end #main -->
+
+<footer class="page-footer">
+  Probabilitat · Matemàtiques Batxillerat · Teoria, exemples i exercicis resolts · v3.0
+</footer>
+
+<script>
+function toggleSolution(btn) {
+  const content = btn.nextElementSibling;
+  if (content.classList.contains('open')) {
+    content.classList.remove('open');
+    btn.textContent = '▶ Veure solució';
+  } else {
+    content.classList.add('open');
+    btn.textContent = '▼ Amagar solució';
+  }
+}
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.getBoundingClientRect().top;
+    if (top <= 120) current = section.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
